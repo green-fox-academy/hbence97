@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
-project(task_15)
+project(05___TwoNumbers)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(task_15 main.cpp)
+add_executable(05___TwoNumbers main.cpp)
