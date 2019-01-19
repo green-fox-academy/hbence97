@@ -7,7 +7,7 @@ int doubling(int);
     int main(int argc, char* args[]) {
     int baseNum = 123;
     int a = doubling(baseNum);
-    std::cout << a << std::endl;
+        std::cout << a << std::endl;
 
 
     return 0;
