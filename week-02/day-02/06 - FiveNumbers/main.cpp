@@ -1,10 +1,12 @@
 #include <iostream>
-// Create a program which accepts five integers from the console (given by the user)
-// and store them in an array
-// print out the memory addresses of the elements in the array
-int main()
-{
+    // Create a program which accepts five integers from the console (given by the user)
+    // and store them in an array
+    // print out the values of that array using pointers again
+    int main()
+    {
     int numbers[5];
+    int *numberspointer = nullptr;
+    numberspointer = numbers;
 
     std::cout << "Give me 5 numbers :" << std::endl;
 
@@ -14,7 +16,7 @@ int main()
 
     }
     for (int i = 0 ; i < 5 ; i++) {
-        std::cout << " " << &numbers[i];
+        std::cout << " " << numbers[i];
 
     }
     return 0;
