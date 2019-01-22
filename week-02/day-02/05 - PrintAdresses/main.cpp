@@ -14,7 +14,7 @@
 
     }
     for (int i = 0 ; i < 5 ; i++) {
-        std::cout << &numbers[i];
+        std::cout << " " << &numbers[i];
 
     }
     return 0;
