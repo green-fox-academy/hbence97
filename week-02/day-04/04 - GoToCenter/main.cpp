@@ -1,6 +1,6 @@
 #include <iostream>
 #include <SDL.h>
-
+#include <ctime>
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -20,26 +20,30 @@ SDL_Window* gWindow = nullptr;
 //The window renderer
 SDL_Renderer* gRenderer = nullptr;
 
-//void drawline (int x, int y);
-
-void draw(int x1,int y1) {
+void draw()
+{
     // Create a line drawing function that takes 2 parameters:
     // The x and y coordinates of the line's starting point
     // and draws a line from that point to the center of the canvas.
     // Draw at least 3 lines with that function. Use loop for that.
 
+    int x1;
+    int y1;
+    srand (time(0));
+
     for (int i = 0; i < 3; i++){
-        SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0x00);
-        SDL_RenderDrawLine(gRenderer, x1, y1, 320, 240);
-        x1 += 50;
-        y1 += 50;
+        x1 = rand()%640;
+        y1 = rand()%480;
+        SDL_SetRenderDrawColor(gRenderer,0100, 0320, 0150, 100);
+        SDL_RenderDrawLine(gRenderer, x1, y1, 350, 250);
+    }
+
+
+
 }
 
-
-
-
-bool init() {
-
+bool init()
+{
     //Initialize SDL
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
     {
@@ -111,8 +115,6 @@ int main( int argc, char* args[] )
         SDL_RenderClear(gRenderer);
 
         draw();
-
-
 
         //Update screen
         SDL_RenderPresent(gRenderer);
