@@ -1,12 +1,13 @@
+// Exercise:
+// draw four different size and color rectangles.
+// avoid code duplication.
+
 #include <iostream>
 #include <SDL.h>
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
-
-//Draws geometry on the canvas
-void draw();
 
 //Starts up SDL and creates window
 bool init();
@@ -20,17 +21,6 @@ SDL_Window* gWindow = nullptr;
 //The window renderer
 SDL_Renderer* gRenderer = nullptr;
 
-void draw()
-{
-    // Draw a green 100x100 square to the canvas' center.
-    SDL_SetRenderDrawColor(gRenderer, 0x00,0100,0x00, 0x00);
-    SDL_Rect fillRect = {270,190,100,100};
-    SDL_RenderFillRect (gRenderer, &fillRect);
-
-
-
-}
-
 bool init()
 {
     //Initialize SDL
@@ -41,7 +31,7 @@ bool init()
     }
 
     //Create window
-    gWindow = SDL_CreateWindow( "Centered square", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+    gWindow = SDL_CreateWindow( "Four rectangles", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
     if( gWindow == nullptr )
     {
         std::cout << "Window could not be created! SDL Error: " << SDL_GetError() << std::endl;
@@ -103,7 +93,25 @@ int main( int argc, char* args[] )
         SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
         SDL_RenderClear(gRenderer);
 
-        draw();
+        //--------------------------------------------
+        //This is where you can start drawing geometry
+        SDL_SetRenderDrawColor(gRenderer, 0xFF, 140, 250, 0xFF);
+        SDL_Rect fillRect = {30, 30, 60, 30};
+        SDL_RenderFillRect(gRenderer,&fillRect);
+
+        SDL_SetRenderDrawColor(gRenderer, 0x00, 140,400,35);
+        SDL_Rect fillRect2 = {10, 10 , 30, 15};
+        SDL_RenderFillRect (gRenderer, &fillRect2);
+
+        SDL_SetRenderDrawColor(gRenderer, 020, 300, 0xFF, 250);
+        SDL_Rect fillRect3 = { 70, 65, 90, 45};
+        SDL_RenderFillRect (gRenderer, &fillRect3);
+
+        SDL_SetRenderDrawColor(gRenderer, 500, 30, 50, 100);
+        SDL_Rect fillRect4 = { 140, 115, 120, 60};
+        SDL_RenderFillRect (gRenderer, &fillRect4);
+
+        //--------------------------------------------
 
         //Update screen
         SDL_RenderPresent(gRenderer);
