@@ -24,11 +24,11 @@ private:
 };
 
 int main(int argc, char* args[]) {
- PostIt orangePostit ("orange", "Idea 1", "blue text");
- PostIt pinkPostit ("pink", "Awesome", "black text");
- PostIt yellowPostit ("yellow", "Superb!", "green text");
+ PostIt orangePostIt ("orange", "Idea 1", "blue text");
+ PostIt pinkPostIt ("pink", "Awesome", "black text");
+ PostIt yellowPostIt ("yellow", "Superb!", "green text");
 
- std::cout << pinkPostit.tostring() << std::endl;
- std::cout << orangePostit.tostring() << std::endl;
- std::cout << yellowPostit.tostring() << std::endl;
+ std::cout << pinkPostIt.tostring() << std::endl;
+ std::cout << orangePostIt.tostring() << std::endl;
+ std::cout << yellowPostIt.tostring() << std::endl;
 }
