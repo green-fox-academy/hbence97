@@ -20,7 +20,7 @@ public:
     }
 };
 
-int main(int argc, char* args[]) {
+int main() {
     PostIt orange ("orange", "Idea 1" , "blue text");
     PostIt pink ("pink", "Awesome", "black text");
     PostIt yellow ("yellow", "Superb!" , "green text");
