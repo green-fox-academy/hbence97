@@ -22,9 +22,23 @@ int main(int argc, char* args[])
     // Things are a little bit messed up
     // Your job is to decode the notSoCrypticMessage by using the map as a look up table
     // Assemble the fragments into the out variable
-    std::map < int, std::string > ;
-    map[1];
-    std::cout << [1] << std::endl;
+
+    std::cout << map[1];
+    std::cout << map [12];
+    std::cout << map [1];
+    std::cout << map [2];
+    std::cout << map [11];
+    std::cout << map [1];
+    std::cout << map [7];
+    std::cout << map [11];
+    std::cout << map [1];
+    std::cout << map [49];
+    std::cout << map [1];
+    std::cout << map [3];
+    std::cout << map [11];
+    std::cout << map [1];
+    std::cout << map [50];
+    std::cout << map [11];
 
     std::cout << out << std::endl;
 
