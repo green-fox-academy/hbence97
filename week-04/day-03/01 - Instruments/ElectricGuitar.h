@@ -5,8 +5,13 @@
 #ifndef INC_01_INSTRUMENTS_ELECTRICGUITAR_H
 #define INC_01_INSTRUMENTS_ELECTRICGUITAR_H
 
+#include "stringedInstruments.h"
 
-class ElectricGuitar {
+class ElectricGuitar : public stringedInstruments {
+public:
+    ElectricGuitar();
+    ElectricGuitar(int NumberOfStrings);
+    void sound() override;
 
 };
 

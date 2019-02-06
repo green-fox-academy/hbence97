@@ -13,7 +13,7 @@ protected:
     int numberOfStrings;
 
 public:
-    virtual void sound();
+    virtual void sound() = 0;
     virtual void play() override;
 
 };
