@@ -4,16 +4,22 @@
 
 #ifndef INC_00_PERSON_MENTOR_H
 #define INC_00_PERSON_MENTOR_H
-enum level{
+
+#include <iostream>
+#include "person.h"
+enum LEVEL{
     Junior,
     Intermediate,
     Senior
 };
 
-class Mentor {
-private:
-    level level;
-
+class mentor : public Person{
+    LEVEL level;
+public:
+    mentor (std::string name, int age, GENDER gender, LEVEL level);
+    mentor();
+    void getGoal() override;
+    void introduce() override;
 };
 
 

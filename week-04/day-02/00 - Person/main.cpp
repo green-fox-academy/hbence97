@@ -1,9 +1,10 @@
 #include <iostream>
 #include "person.h"
+#include "mentor.h"
 
 int main()
 {
-    Person po("Bence",21,MALE);
-    po.introduce();
+    mentor mo("Bence",21,MALE, Intermediate);
+    mo.introduce();
     return 0;
 }
