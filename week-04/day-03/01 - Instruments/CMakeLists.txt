@@ -3,4 +3,4 @@ project(01___Instruments)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(01___Instruments main.cpp instrument.cpp stringedInstruments.cpp ElectricGuitar.cpp)
+add_executable(01___Instruments main.cpp instrument.cpp stringedInstruments.cpp ElectricGuitar.cpp BassGuitar.cpp Violin.cpp)

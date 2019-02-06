@@ -5,7 +5,6 @@
 #include "ElectricGuitar.h"
 
 
-
 void ElectricGuitar::sound()
 {
     std::cout << "Electric Guitar, a "<< numberOfStrings << "-stringed instrument that goes Twangg";
