@@ -6,11 +6,15 @@
 #define INC_10_PETROLSTATION_CAR_H
 
 
-
 class Car {
+    int gasAmount;
+    int capacity;
+public:
+    Car (int gasAmount,int capacity);
+    void fill();
+    bool isFull();
 
 };
-
 
 
 #endif //INC_10_PETROLSTATION_CAR_H
