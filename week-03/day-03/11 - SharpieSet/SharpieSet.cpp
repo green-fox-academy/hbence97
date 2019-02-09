@@ -21,5 +21,5 @@ void SharpieSet::usable()
 
 void SharpieSet::removeTrash()
 {
-    
+
 }
