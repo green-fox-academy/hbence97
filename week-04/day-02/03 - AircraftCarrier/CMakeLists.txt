@@ -3,4 +3,4 @@ project(03___AircraftCarrier)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(03___AircraftCarrier main.cpp aircrafts.cpp F16.cpp F35.cpp)
+add_executable(03___AircraftCarrier main.cpp aircrafts.cpp F16.cpp F35.cpp carrier.cpp)

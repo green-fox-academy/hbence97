@@ -6,7 +6,6 @@ class Sharpie{
     float inkAmount;
 
 public:
-
     Sharpie(std::string a, float b){
         color = a;
         width = b;
@@ -16,15 +15,14 @@ public:
         inkAmount = inkAmount-1;
     }
 
-
-
     std::string tostring(){
         std::string info = "color is " + color + " and the width is " + std::to_string(width) + "and the ink amount is" + std::to_string(inkAmount);
         return info;
     }
-
 };
-int main() {
+
+int main()
+{
     Sharpie pinkSharpie("pink", 2.7);
     pinkSharpie.use();
 

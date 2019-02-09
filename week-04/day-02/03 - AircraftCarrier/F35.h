@@ -7,7 +7,7 @@
 
 #include "aircrafts.h"
 
-class F35 : public aircrafts{
+class F35 : public aircrafts {
 protected:
     int maxAmmo;
     int baseDamage;
