@@ -15,13 +15,22 @@ Pirate::Pirate(std::string name, bool isCaptain, bool hasWoodenLeg)
 
 void Pirate::work()
 {
-    _gold += 10;
-    _healthPoints -= 5;
+    if (_isCaptain) {
+        _gold += 10;
+        _healthPoints -= 5;
+    }else{
+        _gold++;
+        _healthPoints--;
+    }
 }
 
 void Pirate::party()
 {
-    _healthPoints += 10;
+    if(_isCaptain) {
+        _healthPoints += 10;
+    } else {
+        _healthPoints++;
+    }
 }
 
 std::string Pirate::toString()
