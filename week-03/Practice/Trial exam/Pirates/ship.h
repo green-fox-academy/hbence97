@@ -14,7 +14,7 @@ class Ship {
 
 public:
     void addPirate(Pirate pirate);
-    std::vector<std::string> getPoorPirates();
+    std::vector <std::string> getPoorPirates();
     int getGolds();
     void lastDayOnTheShip();
     void prepareForBattle();
