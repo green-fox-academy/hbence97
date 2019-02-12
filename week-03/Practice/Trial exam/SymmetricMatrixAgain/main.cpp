@@ -5,7 +5,7 @@ bool isSymmetric(std::vector<std::vector<int>> matrix);
 
 int main()
 {
-    std::vector<std::vector<int>> matrix1 = {{1,0,1}, {0,2,2}, {1,2,5}};
+    std::vector<std::vector<int>> matrix1 = {{1,0,1}, {0, 2, 2}, {1, 2, 5}};
     if(isSymmetric(matrix1)) {
         std::cout << "The matrix is symmetric" << std::endl;
     } else {
@@ -23,9 +23,9 @@ int main()
 
 bool isSymmetric(std::vector<std::vector<int>> matrix)
 {
-    for (int i = 0; i < matrix.size(); i++){
-        for (int j = 0; j < matrix[i].size() ; j++) {
-            if (matrix [i][j] != matrix [j][i]){
+    for (int i = 0; i < matrix.size(); i++) {
+        for (int j = 0; j < matrix[i].size(); j++) {
+            if (matrix[i][j] != matrix[j][i]) {
                 return false;
             }
         }
