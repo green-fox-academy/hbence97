@@ -3,4 +3,4 @@ project(Pirates3rd)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Pirates3rd main.cpp pirate.cpp)
+add_executable(Pirates3rd main.cpp pirate.cpp ship.cpp)
