@@ -18,7 +18,7 @@ public:
     virtual std::string getStatus() = 0;
     virtual bool isPriority() = 0;
     virtual int getCurrentAmmo();
-    virtual int baseDamage();
+    virtual int getBaseDamage() = 0;
 };
 
 

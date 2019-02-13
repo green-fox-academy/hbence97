@@ -13,9 +13,11 @@ class Carrier {
 private:
     int _ammoStore;
     std::vector<Aircraft>_aircrafts;
+    //objects slicing
 public:
     Carrier(int ammo, int healthPoints);
     void addAircraft(Aircraft aircrafts);
+    //objects slicing
     int fill();
     void fight();
     std::string getStatus();

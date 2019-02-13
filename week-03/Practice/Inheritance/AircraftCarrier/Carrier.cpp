@@ -24,9 +24,10 @@ void Carrier::addAircraft(Aircraft aircrafts)
 
 std::string Carrier::getStatus()
 {
+    int totalDamage = 0;
     for (int i = 0; i < _aircrafts.size() ; ++i) {
-        int totalDamage = int a
-        totalDamage = _aircrafts[i].getCurrentAmmo() * _aircrafts[i].baseDamage();
+
+        totalDamage = _aircrafts[i].getCurrentAmmo() * _aircrafts[i].getBaseDamage();
 
     }
 
