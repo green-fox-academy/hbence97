@@ -6,9 +6,9 @@
 #define AIRCRAFTCARRIER_F16_H
 
 
-#include "aircrafts.h"
+#include "Aircraft.h"
 
-class F16 : public aircrafts{
+class F16 : public Aircraft{
 protected:
     int maxAmmo = 8;
     int baseDamage = 30;

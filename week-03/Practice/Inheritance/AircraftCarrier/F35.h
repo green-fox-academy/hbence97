@@ -6,9 +6,9 @@
 #define AIRCRAFTCARRIER_F35_H
 
 
-#include "aircrafts.h"
+#include "Aircraft.h"
 
-class F35 : public aircrafts {
+class F35 : public Aircraft {
 protected:
     int maxAmmo = 12;
     int baseDamage = 50;
