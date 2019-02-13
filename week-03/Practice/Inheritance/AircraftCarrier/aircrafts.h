@@ -10,11 +10,11 @@
 class aircrafts {
     int ammo;
 public:
-    virtual int fight();
-    virtual int refill(int a);
-    virtual std::string getType();
-    virtual std::string getStatus();
-    virtual bool isPriority();
+    virtual int fight() = 0;
+    virtual int refill(int a) = 0;
+    virtual std::string getType() = 0;
+    virtual std::string getStatus() = 0;
+    virtual bool isPriority() = 0;
 };
 
 

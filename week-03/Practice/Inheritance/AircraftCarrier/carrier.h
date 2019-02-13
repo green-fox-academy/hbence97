@@ -6,11 +6,16 @@
 #define AIRCRAFTCARRIER_CARRIER_H
 
 
+#include <vector>
 
 class carrier {
+    int storeAircrafts;
+    int storeOfAmmo;
+public:
+    std::vector<int>newAircrafts;
+
 
 };
-
 
 
 #endif //AIRCRAFTCARRIER_CARRIER_H

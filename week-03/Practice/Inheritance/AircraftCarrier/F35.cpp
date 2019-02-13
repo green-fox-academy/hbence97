@@ -22,13 +22,12 @@ int F35::refill(int a)
 
 std::string F35::getType()
 {
-    std::cout << "The plane's type is F35." << std::endl;
+    return ("The plane's type is F35.");
 }
 
 std::string F35::getStatus()
 {
-    std::cout << getType() + " Ammo: " + std::to_string(maxAmmo) + "Base damage: " + std::to_string(baseDamage) + " All damage: " + std::to_string(maxAmmo * baseDamage);
-    return getStatus();
+    return (getType() + " Ammo: " + std::to_string(maxAmmo) + "Base damage: " + std::to_string(baseDamage) + " All damage: " + std::to_string(maxAmmo * baseDamage));
 }
 
 bool F35::isPriority()
