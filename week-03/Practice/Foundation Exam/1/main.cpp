@@ -6,7 +6,7 @@ int main() {
     std::vector<int> arr = {0, 1, 5, 4};
     int n = 3;
     vectorMultiplier(arr, n);
-    
+
     return 0;
 }
 
