@@ -9,8 +9,6 @@ int main() {
     std::cin >> num;
     digits(num);
 
-
-
     return 0;
 }
 
