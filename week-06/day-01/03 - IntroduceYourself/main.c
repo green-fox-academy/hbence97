@@ -14,8 +14,14 @@ int main()
     //  John Doe
     //  31
     //  1.87
+    char myName [] = "Bence";
+    int age = 21;
+    float height = 1.71;
 
-    
+    printf("My name is %s\n", myName );
+    printf("My age is %d", age);
+    printf("My height is %.2f", height);
+
 
     return 0;
 }
