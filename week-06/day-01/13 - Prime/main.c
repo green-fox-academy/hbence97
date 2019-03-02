@@ -10,20 +10,21 @@ int main()
     // and returns 1 if the number is a prime number and 0 otherwise
     // (in this case 0 is not considered as a prime number)
     printf("Give me a number and I'll tell you if it's a prime number or not.\n");
-    int b;
-    scanf("%d", &b);
-    printf(prime(b));
-
+    int a;
+    scanf("%d", &a);
+    printf("Your number is %d\n", prime(a));
     return 0;
 }
 
 int prime(int a)
 {
-    int primeNumber;
-    primeNumber = a;
-    if(primeNumber % a == 0 && primeNumber / 1 == a){
-        return 1;
-    } else {
-        return 0;
+    int b = 1;
+    if(a > 1){
+        for (int i = 2; i <= a / 2 ; ++i) {
+            if (a % i == 0) {
+                b = 0;
+            }
+        }
     }
+    return b;
 }
