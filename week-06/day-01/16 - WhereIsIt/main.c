@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+int letterFinder(char* testSentence, char character);
+
 int main()
 {
     // Create a program which asks for a string and a character and stores them
@@ -25,8 +27,30 @@ int main()
     // given_char = 'a'
     //
     // the function should return: -1, because there is no 'a' in the word "embedded"
-    //
+
+    puts("Give me a sentence");
+    char sentence[50];
+    gets(sentence);
+    printf("And now a character\n");
+    char letter;
+    scanf("%c",&letter);
+
+    printf("%d", letterFinder(sentence,letter));
 
 
     return 0;
+}
+
+int letterFinder(char* testSentence, char character)
+{
+    int index;
+    char* pointer;
+    //char* strchr (const char *, int);
+    pointer = strchr (testSentence, character);
+    if (pointer == NULL){
+        return -1;
+    } else {
+        index = pointer - testSentence;
+        return index / sizeof(char);
+    }
 }
