@@ -7,6 +7,11 @@
 // print the array in descending order
 // delete the arrays after you don't use them
 
+int cpmfunc(const void *a, const void *b)
+{
+    return (*(int*)a - *(int*) b);
+}
+
 int main()
 {
     int* even = NULL;
@@ -29,5 +34,20 @@ int main()
         printf("The nr: %d element is %d\n", j+1, odd[j]);
     }
 
+    int* result_pointer = NULL;
+    int length_of_result_pointer = (size_of_array + size_of_array2);
+    result_pointer = (int*) malloc(length_of_result_pointer * sizeof(int));
+
+    for (int k = 0; k < result_pointer; ++k) {
+        if (k < 10){
+            result_pointer[k] = even[k];
+        } else {
+            result_pointer[k] = odd[k - 10];
+        }
+    }
+
+    qsort(result_pointer, 20, sizeof(int), cpmfunc);
+    int temp = 0;
+    
     return 0;
 }
