@@ -13,7 +13,7 @@ int main()
     pointer = (int*)malloc(size_of_array * sizeof(int));
 
     for (int i = 0; i < size_of_array; ++i) {
-        pointer[i] = i + 1;
+        pointer[i] = i * 2;
     }
     for (int j = 0; j < size_of_array; ++j) {
         printf("The nr. %d. element is: %d\n", j + 1, pointer[j]);
