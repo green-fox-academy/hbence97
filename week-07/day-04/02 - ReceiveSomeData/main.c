@@ -49,7 +49,7 @@ int main(void)
 
     HAL_UART_Init(&UartHandle);
 
-    char received[100] = "Helo\n";
+    char received[100] = "Hello\n";
 
     while (1) {
 
