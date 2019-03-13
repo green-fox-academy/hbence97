@@ -7,17 +7,16 @@ GPIO_InitTypeDef push_button;
 
 void init_push_button(void)
 {
-	__HAL_RCC_GPIOF_CLK_ENABLE();
+	__HAL_RCC_GPIOI_CLK_ENABLE();
 
-	push_button.Pin = GPIO_PIN_9;
+	push_button.Pin = GPIO_PIN_11;
 	push_button.Pull = GPIO_NOPULL;
 	push_button.Speed = GPIO_SPEED_FAST;
 	push_button.Mode = GPIO_MODE_IT_RISING;
 
-	HAL_GPIO_Init(GPIOF, &push_button);
-	HAL_NVIC_SetPriority(EXTI9_5_IRQn, 2, 0);
-	HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
-
+	HAL_GPIO_Init(GPIOI, &push_button);
+	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 2, 0);
+	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
 int main(void)
@@ -33,9 +32,9 @@ int main(void)
 	}
 }
 
-void EXTI9_5_IRQHandler(void)
+void EXTI15_10_IRQHandler(void)
 {
-	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_9);
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_11);
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
