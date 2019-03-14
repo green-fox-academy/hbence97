@@ -2,16 +2,19 @@
 #include "stm32746g_discovery.h"
 
 /* create the configuration structs */
-UART_HandleTypeDef uart_handle;			//typedef
-GPIO_InitTypeDef user_button_handle;	// -||-
-TIM_HandleTypeDef timer_handle;			//-||-
+UART_HandleTypeDef uart_handle;
 
-#define UART_PUTCHAR int __io_putchar(int ch) 	//printf miatt
+TIM_HandleTypeDef timer_handle;
+
+#define UART_PUTCHAR int __io_putchar(int ch)
+
+#define TIM_HIGHER
+//#define EXTI_HIGHER
 
 static void Error_Handler(void);
 static void SystemClock_Config(void);
 
-void init_uart(void)	//UART inicializálás,(printf miatt)
+void init_uart(void)
 {
 	__HAL_RCC_USART1_CLK_ENABLE();
 
@@ -25,31 +28,7 @@ void init_uart(void)	//UART inicializálás,(printf miatt)
 	BSP_COM_Init(COM1, &uart_handle);
 }
 
-void init_user_button(void)		//user button inicializálás
-{
-	__HAL_RCC_GPIOI_CLK_ENABLE(); /* enable the GPIOI clock */
 
-	user_button_handle.Pin = GPIO_PIN_11; /* the pin is the 11 */
-	/* We know from the board's datasheet that a resistor is already installed externally for this button
-	 (so it's not floating), we don't want to use the internal pull feature */
-	user_button_handle.Pull = GPIO_NOPULL;
-	user_button_handle.Speed = GPIO_SPEED_FAST; /* port speed to fast */
-	/* Here is the trick: our mode is interrupt on rising edge */
-	user_button_handle.Mode = GPIO_MODE_IT_RISING;	//interupt modban
-
-	HAL_GPIO_Init(GPIOI, &user_button_handle);
-
-	/* we don't need to explicitly call the HAL_NVIC_SetPriorityGrouping function,
-	 * because the grouping defaults to NVIC_PRIORITYGROUP_2:
-	 * HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_2);
-	 */
-
-	/* assign the intermediate priority to our interrupt line */
-	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 2, 0);
-
-	/* tell the interrupt handling unit to process our interrupts */
-	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
-}
 
 void init_timer(void)
 {
@@ -58,8 +37,8 @@ void init_timer(void)
 	HAL_TIM_Base_DeInit(&timer_handle);
 	__HAL_TIM_SET_COUNTER(&timer_handle, 0);
 	timer_handle.Instance = TIM2;
-	timer_handle.Init.Prescaler = 54000 - 1; /* 108000000/54000=2000 -> speed of 1 count-up: 1/2000 sec = 0.5 ms */  //mekkora egy ugrás a timer értékben... a prescaler oszt
-	timer_handle.Init.Period = 12000 - 1; /* 6000 x 0.5 ms = 6 second period */  // meddig (hány lépcsõ van)  a period szoroz
+	timer_handle.Init.Prescaler = 54000 - 1; /* 108000000/54000=2000 -> speed of 1 count-up: 1/2000 sec = 0.5 ms */
+	timer_handle.Init.Period = 1000 - 1; /* 6000 x 0.5 ms = 6 second period */
 	timer_handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	timer_handle.Init.CounterMode = TIM_COUNTERMODE_UP;
 
@@ -67,22 +46,19 @@ void init_timer(void)
 	HAL_TIM_Base_Init(&timer_handle);
 
 
-	/* assign the highest priority to our interrupt line */
-	HAL_NVIC_SetPriority(TIM2_IRQn, 1, 0);  // a középsõ a fontos, a másik legyen mindig nulla  (minél kisebb a aszán annál nagyobb a prioritása)
-
+	HAL_NVIC_SetPriority(TIM2_IRQn, 1, 0);
 	/* tell the interrupt handling unit to process our interrupts */
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 }
 
 int main(void)
 {
-	HAL_Init();  // ez a kettõ mindig az elején
-	SystemClock_Config();  // timerhez, szinén elõl
+	HAL_Init();
+	SystemClock_Config();
 
 	BSP_LED_Init(LED_GREEN);
 
 	init_uart();
-	init_user_button();
 	init_timer();
 
 	/* starting the timer */
@@ -96,19 +72,6 @@ int main(void)
 	}
 }
 
-void EXTI15_10_IRQHandler(void)
-{
-	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_11);
-}
-
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	/* yeey! this is the interrupt routine! */
-	BSP_LED_Toggle(LED_GREEN);
-
-	printf("Button interrupt\n");
-}
-
 void TIM2_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&timer_handle);
@@ -117,17 +80,8 @@ void TIM2_IRQHandler(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == TIM2) {
-		printf("ENTRY point of the timer callback (in every 6 seconds)\n\n");
-		/* Simulationg a very long process inside the interrupt service routine.
-		 * It is to be avoided to write such a long callback in real life. */
+		BSP_LED_Toggle(LED_GREEN);
 
-		int start_timestamp = __HAL_TIM_GET_COUNTER(htim);
-        for (int i = 0; i < 48826291; i++); /* 48826291 execution of this loop takes exactly 3000 ms */
-		int end_timestamp = __HAL_TIM_GET_COUNTER(htim);
-
-		int time_diff = (end_timestamp - start_timestamp) / 2;
-
-		printf("EXIT point of the timer callback (after %d ms)\n\n", time_diff);
 	}
 }
 
@@ -137,11 +91,11 @@ UART_PUTCHAR
 	return ch;
 }
 
-static void Error_Handler(void) // ez mindig ugyanaz
+static void Error_Handler(void)
 {
 }
 
-static void SystemClock_Config(void)  //  -||-
+static void SystemClock_Config(void)
 {
 	RCC_OscInitTypeDef RCC_OscInitStruct =
 	{ 0 };
