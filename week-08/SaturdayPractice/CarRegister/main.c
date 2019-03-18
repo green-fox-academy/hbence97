@@ -59,7 +59,8 @@ int main()
     car3.year = 2003;
     cars[2] = car3;
 
-    printf("The number of cars that are older then the given age: %d", get_cars_older_than(cars, 3, 2));
+    printf("The number of cars that are older then the given age: %d\n", get_cars_older_than(cars, 3, 2));
+    printf("The number of cars that has Dual Clutch transmissions is: %d\n", get_transmission_count(cars, 3, DUAL_CLUTCH));
 
 
     return 0;
