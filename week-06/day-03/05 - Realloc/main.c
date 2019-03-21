@@ -9,25 +9,27 @@
 
 int main()
 {
-    int* pointer = NULL;
-    printf("How many numbers do you want to enter:\n");
-    int x = 0;
-    scanf("%d", &x);
-    pointer = (int *) malloc(x * sizeof(int));
-    for (int i = 0; i < x; ++i) {
-        printf("Now give me the numbers! %d \n", i + 1);
-        scanf("%d", &pointer[i]);
-    }
-    int y = 0;
-    for (int i = 0; i < x; ++i) {
-        y += pointer[i];
+    int user_input;
+    printf("how many numbers will you want to enter?\n");
+    scanf("%d", &user_input);
+
+    int* user_numbers=(int*)malloc(user_input*sizeof(int));
+
+    printf("space reserved, you're safe to enter them, sir!\n");
+    int sum=0;
+    for(int i=0; i<user_input; i++){
+        scanf("%d", &user_numbers[i]);
+        sum+=user_numbers[i];
     }
 
-    realloc(pointer, y * sizeof(pointer));
-
-    for (int j = 0; j < y; ++j) {
-
+    int* sum_arr=(int*)malloc(sum*sizeof(int));
+    for(int i=0; i<sum; i++){
+        sum_arr[i]=i+1;
+        printf("%d ", sum_arr[i]);
     }
+
+    free(user_numbers);
+    free(sum_arr);
 
     return 0;
 }
