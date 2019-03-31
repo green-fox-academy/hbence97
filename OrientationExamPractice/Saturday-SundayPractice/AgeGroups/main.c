@@ -58,7 +58,10 @@ persons_t *get_persons(char *file_name, int *number)
 
         printf("name: %s, birthday: %d-%d-%d\n", persons[i].name, persons[i].year, persons[i].month, persons[i].day);
     }
+}
 
+char list_persons_in_age_group(persons, nmbr_of_persons, BETWEEN_30_AND_35)
+{
 
 }
 
@@ -79,7 +82,7 @@ int main()
     */
 
 
-    //list_persons_in_age_group(persons, nmbr_of_persons, BETWEEN_30_AND_35);
+    list_persons_in_age_group(persons, nmbr_of_persons, BETWEEN_30_AND_35);
     /*
     This function should print out the filtered informations based on the given age group
     to the console in the following way:
