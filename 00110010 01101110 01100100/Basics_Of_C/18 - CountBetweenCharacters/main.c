@@ -5,8 +5,10 @@
 int between_char(char* string, char c)
 {
     char* word;
-    word = strchr(string,c) + 1;
-    return strlen(word) - strlen(strchr(word, c));
+    char* word2;
+    word = strchr(string,c);
+    word2 = strrchr(string, c);
+    return word2 - word - 1;
 }
 
 int main()
