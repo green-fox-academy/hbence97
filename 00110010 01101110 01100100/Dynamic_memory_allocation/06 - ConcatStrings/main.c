@@ -20,7 +20,7 @@ int main()
     char* s1 = "Thank";
     char* s2 = " you";
     char* s = concatenates(s1,s2);
-    printf("%s",concatenates(s1,s2));
+    printf("%s",s);
 
     free(s);
     return 0;
