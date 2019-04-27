@@ -13,22 +13,19 @@
 
 int main()
 {
-    int money = 1024;
+    int heritage = 1024;
     srand(time(NULL));
-    int relatives = rand() % 30 + 20;
-    int* pointer = (int*) malloc(relatives * sizeof(int));
-    for (int i = 0; i < relatives; ++i) {
-        pointer[i] = money;
-        int winner = rand() % relatives + 0;
-        if (money == 0){
-            printf("Well, you got 0 money from your relative.\n");
-        } else {
-            printf("Congrats, you got %d money from your uncle's heritage.\n", money);
-            pointer[winner] = pointer[winner] + money/ 2;
-            money /= 2;
-        }
+    int number_of_relatives = rand() % 30 + 20;
+    int* relatives =  (int*)calloc(number_of_relatives, sizeof(int));
+    while(heritage > 0){
+        int winner = rand() % number_of_relatives;
+        relatives[winner] = relatives[winner] + heritage/2;
+        heritage = heritage / 2;
     }
-    free(pointer);
-
+    printf("There were %d relatives, and this is how much each of them received.0\n", number_of_relatives);
+    for(int i=0; i<number_of_relatives; i++){
+        printf("%d ", relatives[i]);
+    }
+    free(relatives);
     return 0;
 }
