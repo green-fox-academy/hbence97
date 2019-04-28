@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 /* Digimon database!
  * You should store the following data in a structure
  *  - the name of the digimon (which is shorter than 128 characters)
@@ -48,7 +47,6 @@
  *
  * Don't forget to handle invalid inputs (NULL pointers, invalid values etc.)
  */
-
 typedef enum{
     BABY,
     IN_TRAINING,
@@ -117,7 +115,6 @@ int average_health_of_same_tamer(digimon_t* digimon, int num_digimons, char* tam
 
 int main()
 {
-
     digimon_t digimon1;
     digimon1.digimon_age = 5;
     digimon1.digimon_health = 50;
@@ -146,9 +143,8 @@ int main()
     strcpy(digimon4.digimon_name, "Lila");
     strcpy(digimon4.digimon_tamer, "Trainer 1");
 
-
-
     digimon_t digimons[] = {digimon1, digimon2, digimon3, digimon4};
+
 
     printf("%d\n", min_health_index(digimons,4));
 
