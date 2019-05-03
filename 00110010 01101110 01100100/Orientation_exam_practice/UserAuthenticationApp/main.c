@@ -2,12 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef enum{
-  FALSE = 0,
-  TRUE = 1
-} bool_t;
+int username_exists(char* username);
+void register_user(char* username, char* password);
 
-bool_t username_exists(char* username);
 
 int main() {
 
@@ -25,28 +22,50 @@ int main() {
         char username[50];
         printf("Cool, choose a username.\n");
         scanf("%s", username);
-        // ----- eddig működik rendesen -----
-
-        FILE *fp = fopen("database.txt", "a");
-        if (fp == NULL) {
-            printf("Failed to open the file.\n");
-            return 0;
+        while (username_exists(username) == 1){
+            printf("The username is already taken.\n");
+            scanf("%s", username);
         }
-        //Regisztrálás, illetve ha foglalt a név.
-        char buffer[50];
-        while (!feof(fp)) {
-            fgets(buffer, 50, fp);
+        if (username_exists(username) == 0) {
+            printf("Now give me the password.\n");
+            char password[50];
+            scanf("%s", password);
 
-            char *username_from_file = strtok(buffer, " ");
-
-            while (strcmp(username_from_file, username) == 0){
-                printf("The username already exists, try again.\n");
-                scanf("%s", username);
-            }
-            if (strcmp(username_from_file, username) != 0){
-                fprintf(fp,"\n%s",username);
-            }
+            register_user(username,password);
+            printf("The registration was succesful.\n");
         }
     }
     return 0;
+}
+
+
+int username_exists(char *username_check)
+{
+    char* username_from_file;
+
+    FILE *fp = fopen("database.txt", "r");
+    if (fp == NULL) {
+        printf("Failed to open the file.\n");
+        return 0;
+    }
+    char buffer[50];
+    while (!feof(fp)) {
+        fgets(buffer, 50, fp);
+
+        username_from_file = strtok(buffer, " ");
+        if (strcmp(username_from_file, username_check) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void register_user(char* username, char* password)
+{
+    FILE *fp;
+    fp = fopen("database.txt","a");
+    if (fp == NULL){
+        printf("There was a problem opening the file,\n");
+    }
+     fprintf(fp,"\n%s %s",username,password);
 }
