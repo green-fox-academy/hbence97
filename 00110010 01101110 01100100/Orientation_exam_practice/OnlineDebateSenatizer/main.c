@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 char* senatizer (char* debate)
 {
@@ -17,11 +18,37 @@ char* senatizer (char* debate)
     }
 }
 
+void removing_excl_mark(char* debate)
+{
+    gets(debate);
+    int len;
+    char excl = '!';
+
+    len = strlen(debate);
+
+    for (int i = 0; i < len; ++i)
+    {
+        if (debate[i] == excl)
+        {
+            for (int j = i; j < len; ++j)
+            {
+                debate[j] = debate[j + 1];
+            }
+            len--;
+            i--;
+        }
+    }
+}
+
 int main() {
 
-    printf("Write a comment.\n");
     char debate1[50];
-    printf("%s", senatizer(debate1));
+    printf("Write a comment. I will remove the exclamation marks\n");
+    removing_excl_mark(debate1);
+    printf("%s\n",debate1);
 
+    char debate2[50];
+    printf("Write another one. Only the first letter will be capitalized.\n");
+    printf("%s\n",senatizer(debate2));
     return 0;
 }
