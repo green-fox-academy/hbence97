@@ -9,10 +9,13 @@ int main(void) {
 	int counter = 0;
 
 	while (1) {
-		if (BSP_PB_GetState(BUTTON_KEY)) {
-			counter++;
-			/* If button is pressed do something */
-			if(counter >= 5){
+		int push = 0;
+		while (BSP_PB_GetState(BUTTON_KEY)) {
+			push++;
+			if(push == 1){
+				counter++;
+			}
+			while(counter >= 5){
 				BSP_LED_On(LED1);
 			}
 		}
