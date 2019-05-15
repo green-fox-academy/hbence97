@@ -50,22 +50,29 @@ void scale_recipe(ingredient_t ingredient, unsigned char number_of_people)
     if (fp == NULL){
         printf("Failed to open the file.\n");
     }
-    //number_of_people = (unsigned char)malloc(number_of_people * sizeof(unsigned char));
-    printf("How many do you want to order?\n");
-    scanf("%s",&number_of_people);
-    char buffer[50];
-    while (!feof(fp)){
-        fgets(buffer,50,fp);
-
-        char* ingredient_name = strtok(buffer," ");
-        char* measuring_unit = strtok(NULL," ");
-        char* amount = strtok(NULL,"\n");
-
-        strcpy(ingredient.name_of_ingredient,ingredient_name);
-        strcpy(ingredient.name_of_measuring_unit,measuring_unit);
-        strcpy(ingredient.amount_needed,atoi(amount) * number_of_people);
-
-        fprintf(fp, "%s %s",ingredient_name,measuring_unit);
+    FILE *fp2;
+    fp2 = fopen("vegan_curry_for_x.txt", "r");
+    if (fp2 == NULL){
+        printf("Failed to open the file.\n");
     }
+    //number_of_people = (unsigned char)malloc(number_of_people * sizeof(unsigned char));
+    //printf("How many do you want to order?\n");
+    //scanf("%s",&number_of_people);
+    char buffer[50];
+    char* ingredient_name;
+    char* measuring_unit;
+    char* amount;
+    while (!feof(fp2)){
+        fgets(buffer, 50, fp);
+        ingredient_name = strtok(buffer," ");
+        measuring_unit = strtok(NULL," ");
+        amount = strtok(NULL,"\n");
+
+        strcpy(ingredient_name,ingredient.name_of_ingredient);
+        strcpy(measuring_unit,ingredient.name_of_measuring_unit);
+        strcpy(amount,ingredient.amount_needed);
+
+    }
+    fprintf(fp, "%s %s %d",ingredient_name,measuring_unit, (int) amount);
     fclose(fp);
 }
