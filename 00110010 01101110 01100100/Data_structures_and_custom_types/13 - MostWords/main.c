@@ -9,7 +9,6 @@
 // You need to make sure that characters like commas, colons, etc are not part of the words.
 // Also make it case sensitive so words that only different in case sensitivity are the same.
 
-
 int main() {
     FILE *fp;
     fp = fopen("text_file.txt", "r");
@@ -22,7 +21,6 @@ int main() {
     int count[MAX_WORDS];
     int i;
     int len;
-    int max_count = 0;
 
     for (i = 0; i< MAX_WORDS; i++) {
         count[i] = 0;
@@ -39,20 +37,18 @@ int main() {
         if(ispunct(word[len - 1])) {
             word[len - 1] = '\0';
         }
-
         //Check if word exists in list of all distinct words
-        max_count = 0;
         int is_unique = 1;
         for (i = 0; i < index && is_unique; ++i)
         {
-            if(strcmp(words[i], word) == 0){
+            if (strcmp(words[i], word) == 0){
                 is_unique = 0;
             }
         }
         // If word is unique then add it to distinct words list
         // and increment index. Otherwise increment occurrence
         // count of current word.
-        if(is_unique)
+        if (is_unique)
         {
             strcpy(words[index], word);
             count[index]++;
@@ -63,7 +59,6 @@ int main() {
         }
     }
     fclose(fp);
-
     /*
      * Print occurrences of all words in file.
      */
