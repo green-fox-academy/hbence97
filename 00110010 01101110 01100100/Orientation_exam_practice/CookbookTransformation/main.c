@@ -3,8 +3,8 @@
 #include <stdlib.h>
 
 typedef struct {
-    char* name_of_ingredient;
-    char* name_of_measuring_unit;
+    char name_of_ingredient[100];
+    char name_of_measuring_unit[100];
     int amount_needed;
 }ingredient_t;
 
@@ -19,7 +19,7 @@ void scale_recipe(ingredient_t ingredient, unsigned char number_of_people);
 
 int main() {
     ingredient_t ingredient1;
-    ingredient1.amount_needed = 3;
+    //ingredient1.amount_needed = 3;
 
     read_recipe("vegan_curry.txt");
     scale_recipe(ingredient1,4);
@@ -51,28 +51,26 @@ void scale_recipe(ingredient_t ingredient, unsigned char number_of_people)
         printf("Failed to open the file.\n");
     }
     FILE *fp2;
-    fp2 = fopen("vegan_curry_for_x.txt", "r");
+    fp2 = fopen("vegan_curry.txt", "r");
     if (fp2 == NULL){
         printf("Failed to open the file.\n");
     }
-    //number_of_people = (unsigned char)malloc(number_of_people * sizeof(unsigned char));
-    //printf("How many do you want to order?\n");
-    //scanf("%s",&number_of_people);
     char buffer[50];
     char* ingredient_name = 0;
     char* measuring_unit = 0;
     char* amount = 0;
-    while (fscanf(fp,"%s", buffer) != EOF){
-        //fgets(buffer, 50, fp);
+    while (!feof(fp2)){
+        fgets(buffer, 50, fp2);
         ingredient_name = strtok(buffer," ");
         measuring_unit = strtok(NULL," ");
-        amount = strtok(NULL,"\n");
+        amount = strtok(NULL," ");
 
-        strcpy(ingredient_name,ingredient.name_of_ingredient);
-        strcpy(measuring_unit,ingredient.name_of_measuring_unit);
-        strcpy(amount,ingredient.amount_needed);
+        strcpy(ingredient.name_of_ingredient,ingredient_name);
+        strcpy(ingredient.name_of_measuring_unit,measuring_unit);
+        ingredient.amount_needed = (atoi(amount) * number_of_people) / 2;
 
+        fprintf(fp, "%s %s %d\n",ingredient.name_of_ingredient,ingredient.name_of_measuring_unit,ingredient.amount_needed);
     }
-    fprintf(fp, "%s %s %d",ingredient_name,measuring_unit, (int)amount);
     fclose(fp);
+    fclose(fp2);
 }
