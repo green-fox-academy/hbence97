@@ -59,11 +59,11 @@ void scale_recipe(ingredient_t ingredient, unsigned char number_of_people)
     //printf("How many do you want to order?\n");
     //scanf("%s",&number_of_people);
     char buffer[50];
-    char* ingredient_name;
-    char* measuring_unit;
-    char* amount;
-    while (!feof(fp2)){
-        fgets(buffer, 50, fp);
+    char* ingredient_name = 0;
+    char* measuring_unit = 0;
+    char* amount = 0;
+    while (fscanf(fp,"%s", buffer) != EOF){
+        //fgets(buffer, 50, fp);
         ingredient_name = strtok(buffer," ");
         measuring_unit = strtok(NULL," ");
         amount = strtok(NULL,"\n");
@@ -73,6 +73,6 @@ void scale_recipe(ingredient_t ingredient, unsigned char number_of_people)
         strcpy(amount,ingredient.amount_needed);
 
     }
-    fprintf(fp, "%s %s %d",ingredient_name,measuring_unit, (int) amount);
+    fprintf(fp, "%s %s %d",ingredient_name,measuring_unit, (int)amount);
     fclose(fp);
 }
