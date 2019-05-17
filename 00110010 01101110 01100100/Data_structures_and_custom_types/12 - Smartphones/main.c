@@ -55,27 +55,40 @@ typedef struct smartphone
 {
     char mobile_name[255];
     int year_of_release;
-    screen_size_t screenSize;
+    screen_size_t screen_size;
 } smartphone_t;
 
-const char* filename = "list.txt";
-
-char* get_oldest_phone(char* file_name)
-{
-    FILE *fptr = fopen(file_name, "r");
-    if (fptr == NULL){
-        printf("Error occured opening the file\n");
-    }
-    char buffer[100];
-    while(!feof(fptr)){
-        fgets(buffer,100,fptr);
-        char* name = strtok(buffer," ");
-        char* release_year = strtok(NULL, " ");
-        char* screen_size = strtok(NULL, " ");
-    }
-}
+char* get_oldest_phone(smartphone_t smartphone[], int size);
+int get_screen_size_count(smartphone_t smartphone[], screen_size_t screen_size, int size);
 
 int main()
 {
+
     return 0;
+}
+
+char* get_oldest_phone(smartphone_t smartphone[], int size)
+{
+    int oldest = UINT_MAX;
+    int index = 0;
+
+    for (int i = 0; i < size; ++i) {
+        if(smartphone[i].year_of_release < oldest){
+            oldest = smartphone[i].year_of_release;
+            index = i;
+        }
+    }
+    return smartphone[index].mobile_name;
+}
+
+int get_screen_size_count(smartphone_t smartphone[], screen_size_t screen_size, int size)
+{
+    int counter = 0;
+
+    for (int i = 0; i < size; ++i) {
+        if(smartphone[i].screen_size == screen_size) {
+            counter++;
+        }
+    }
+    return counter;
 }
