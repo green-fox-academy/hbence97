@@ -69,8 +69,6 @@ int main()
 {
     int size = 0;
 
-    printf("The oldest phone in the database is: %s\n");
-
     return 0;
 }
 
