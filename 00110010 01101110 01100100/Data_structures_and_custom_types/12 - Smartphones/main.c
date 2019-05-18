@@ -56,15 +56,20 @@ typedef struct smartphone
     char mobile_name[255];
     int year_of_release;
     screen_size_t screen_size;
+    int price;
 } smartphone_t;
 
 char* get_oldest_phone(smartphone_t smartphone[], int size);
 int get_screen_size_count(smartphone_t smartphone[], screen_size_t screen_size, int size);
 void read_into_struct(const char file[], int size, smartphone_t smartphone[]);
 void create_new_file(smartphone_t smartphone[], int length);
+void calculate_price(smartphone_t smartphone[], int length);
 
 int main()
 {
+    int size = 0;
+
+    printf("The oldest phone in the database is: %s\n");
 
     return 0;
 }
@@ -133,5 +138,32 @@ void create_new_file(smartphone_t *smartphone, int length)
     if(fp == NULL){
         printf("There was an error oppening the file.\n");
         exit(EXIT_FAILURE);
+    }
+    calculate_price(smartphone, length);
+    for (int i = 0; i < length; ++i) {
+        fprintf(fp,"%s %d EUR", smartphone[i].mobile_name, smartphone[i].price);
+    }
+    fclose(fp);
+}
+
+void calculate_price(smartphone_t smartphone[], int length)
+{
+    int base_price = 300;
+    for (int i = 0; i < length; ++i) {
+        if (smartphone[i].screen_size == SMALL){
+            smartphone[i].price = base_price;
+        } else if (smartphone[i].screen_size == MEDIUM){
+            smartphone[i].price = base_price + 300;
+        } else if (smartphone[i].screen_size == BIG){
+            smartphone[i].price = base_price * 2;
+        }
+    }
+    int current_year = 2019;
+    for (int j = 0; j < length; ++j) {
+        if ((current_year - smartphone[j].year_of_release) > 4 ){
+            smartphone[j].price -= 250;
+        } else {
+            smartphone[j].price -= (current_year - smartphone[j].year_of_release) * 50;
+        }
     }
 }
