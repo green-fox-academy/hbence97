@@ -60,6 +60,8 @@ typedef struct smartphone
 
 char* get_oldest_phone(smartphone_t smartphone[], int size);
 int get_screen_size_count(smartphone_t smartphone[], screen_size_t screen_size, int size);
+void read_into_struct(const char file[], int size, smartphone_t smartphone[]);
+void create_new_file(smartphone_t smartphone[], int length);
 
 int main()
 {
@@ -91,4 +93,45 @@ int get_screen_size_count(smartphone_t smartphone[], screen_size_t screen_size, 
         }
     }
     return counter;
+}
+
+void read_into_struct(const char file[], int size, smartphone_t smartphone[])
+{
+    FILE *fp;
+    fp = fopen(file, "r");
+    if (fp == NULL){
+        printf("There was an error opening the file.\n");
+        exit(EXIT_FAILURE);
+    }
+    char buffer[100];
+    int i = 0;
+    while (!feof(fp)){
+        fgets(buffer, 100, fp);
+        char* name = strtok(buffer, " ");
+        char* release_year = strtok(buffer, " ");
+        char* screen_size = strtok(buffer, " ");
+
+        strcpy(smartphone[i].mobile_name, name);
+        smartphone[i].year_of_release = atoi(release_year);
+        smartphone[i].screen_size = atoi(screen_size);
+        if(screen_size >= 15){
+            smartphone[i].screen_size = BIG;
+        } else if (screen_size >= 12 && screen_size < 15){
+            smartphone[i].screen_size = MEDIUM;
+        } else if (screen_size < 12){
+            smartphone[i].screen_size = SMALL;
+        }
+        i++;
+    }
+    fclose(fp);
+}
+
+void create_new_file(smartphone_t *smartphone, int length)
+{
+    FILE *fp;
+    fp = fopen("prices.txt", "w");
+    if(fp == NULL){
+        printf("There was an error oppening the file.\n");
+        exit(EXIT_FAILURE);
+    }
 }
