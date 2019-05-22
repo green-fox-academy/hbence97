@@ -111,8 +111,8 @@ void read_into_struct(const char file[], int size, smartphone_t smartphone[])
     while (!feof(fp)){
         fgets(buffer, 100, fp);
         char* name = strtok(buffer, " ");
-        char* release_year = strtok(buffer, " ");
-        char* screen_size = strtok(buffer, " ");
+        char* release_year = strtok(NULL, " ");
+        char* screen_size = strtok(NULL, " ");
 
         strcpy(smartphone[i].mobile_name, name);
         smartphone[i].year_of_release = atoi(release_year);
