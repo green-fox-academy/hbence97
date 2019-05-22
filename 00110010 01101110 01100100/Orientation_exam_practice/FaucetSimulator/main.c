@@ -14,6 +14,8 @@
 
 #define UART_PUTCHAR int __io_putchar(int ch)
 
+void SystemClock_Config(void);
+
 GPIO_InitTypeDef user_button_handle;
 GPIO_InitTypeDef red_led_handle;
 GPIO_InitTypeDef blue_led_handle;
@@ -83,11 +85,111 @@ void init_colder_button()
 	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 }
 
+void init_uart_handle()
+{
+	__HAL_RCC_USART1_CLK_ENABLE();
+
+	uart_handle.Instance = USART1;
+	uart_handle.Init.BaudRate = 115200;
+	uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
+	uart_handle.Init.StopBits = UART_STOPBITS_1;
+	uart_handle.Init.Parity = UART_PARITY_NONE;
+	uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	uart_handle.Init.Mode = UART_MODE_TX_RX;
+
+	BSP_COM_Init(COM1, &uart_handle);
+}
+
+void init_led_pins()
+{
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+
+	blue_led_handle.Pin = GPIO_PIN_4;
+	blue_led_handle.Pull = GPIO_NOPULL;
+	blue_led_handle.Mode = GPIO_MODE_AF_PP;
+	blue_led_handle.Speed = GPIO_SPEED_HIGH;
+	blue_led_handle.Alternate = GPIO_AF2_TIM3;
+
+	HAL_GPIO_Init(GPIOB, &blue_led_handle);
+
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+
+	red_led_handle.Pin = GPIO_PIN_15;
+	red_led_handle.Pull = GPIO_NOPULL;
+	red_led_handle.Mode = GPIO_MODE_AF_PP;
+	red_led_handle.Speed = GPIO_SPEED_HIGH;
+	red_led_handle.Alternate = GPIO_AF1_TIM2;
+
+	HAL_GPIO_Init(GPIOA, &red_led_handle);
+}
+
 
 int main(void) {
 
 	while (1)
 	{
+		HAL_Init();
+
+		init_user_button();
+		init_colder_button();
+		init_warmer_button();
+		init_led_pins();
+		init_uart_handle();
 
 	}
+}
+
+void Error_Handler(void)
+{
+}
+
+void SystemClock_Config(void)
+{
+	RCC_OscInitTypeDef RCC_OscInitStruct =
+	{ 0 };
+	RCC_ClkInitTypeDef RCC_ClkInitStruct =
+	{ 0 };
+
+	/**Configure the main internal regulator output voltage */
+	__HAL_RCC_PWR_CLK_ENABLE()
+	;
+	__HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
+	/**Initializes the CPU, AHB and APB busses clocks */
+	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+	RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+	RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+	RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+	RCC_OscInitStruct.PLL.PLLM = 8;
+	RCC_OscInitStruct.PLL.PLLN = 216;
+	RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+	RCC_OscInitStruct.PLL.PLLQ = 2;
+
+	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
+		Error_Handler();
+	}
+
+	/**Activate the Over-Drive mode */
+	if (HAL_PWREx_EnableOverDrive() != HAL_OK) {
+		Error_Handler();
+	}
+
+	/**Initializes the CPU, AHB and APB busses clocks */
+	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+
+	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK) {
+		Error_Handler();
+	}
+}
+
+
+UART_PUTCHAR
+{
+    HAL_UART_Transmit(&uart_handle, (uint8_t*)&ch, 1, 0xFFFF);
+    return ch;
 }
