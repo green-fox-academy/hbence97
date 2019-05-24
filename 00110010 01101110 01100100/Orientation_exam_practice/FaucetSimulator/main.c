@@ -123,20 +123,35 @@ void init_led_pins()
 	HAL_GPIO_Init(GPIOA, &red_led_handle);
 }
 
-
 int main(void) {
+
+	HAL_Init();
+
+	init_user_button();
+	init_colder_button();
+	init_warmer_button();
+	init_led_pins();
+	init_uart_handle();
 
 	while (1)
 	{
-		HAL_Init();
-
-		init_user_button();
-		init_colder_button();
-		init_warmer_button();
-		init_led_pins();
-		init_uart_handle();
 
 	}
+}
+
+void EXTI0_IRQHandler()
+{
+	HAL_GPIO_EXTI_IRQHandler(colder_button_handle.Pin);
+}
+
+void EXTI9_5_IRQHandler()
+{
+	HAL_GPIO_EXTI_IRQHandler(warmer_button_handle.Pin);
+}
+
+void EXTI15_10_IRQHandler()
+{
+	HAL_GPIO_EXTI_IRQHandler(user_button_handle.Pin);
 }
 
 void Error_Handler(void)
@@ -186,7 +201,6 @@ void SystemClock_Config(void)
 		Error_Handler();
 	}
 }
-
 
 UART_PUTCHAR
 {
