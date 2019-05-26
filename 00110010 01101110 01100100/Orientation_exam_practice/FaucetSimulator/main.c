@@ -22,6 +22,8 @@ GPIO_InitTypeDef blue_led_handle;
 GPIO_InitTypeDef warmer_button_handle;
 GPIO_InitTypeDef colder_button_handle;
 
+TIM_HandleTypeDef water_saving_timer_handle;
+
 UART_HandleTypeDef uart_handle;
 
 typedef enum {
@@ -37,7 +39,7 @@ typedef enum {
 	HOT = 4
 } temperature_t;
 
-volatile faucet_state_t state = OFF;
+volatile faucet_state_t faucet_state = OFF;
 volatile temperature_t temperature = LUKE_WARM;
 
 void init_user_button()
@@ -123,6 +125,21 @@ void init_led_pins()
 	HAL_GPIO_Init(GPIOA, &red_led_handle);
 }
 
+void init_water_saving_timer()
+{
+	__HAL_RCC_TIM4_CLK_ENABLE();
+
+	water_saving_timer_handle.Instance = TIM4;
+	water_saving_timer_handle.Init.Prescaler = 10800 - 1; /* 108000000/10800=10000 -> speed of 1 count-up: 1/10000 sec = 0.1 ms */
+	water_saving_timer_handle.Init.Period = 50000 - 1; /* 50000 x 0.1 ms = 5 second period */
+	water_saving_timer_handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	water_saving_timer_handle.Init.CounterMode = TIM_COUNTERMODE_UP;
+
+	HAL_TIM_Base_Init(&water_saving_timer_handle);
+
+	HAL_NVIC_EnableIRQ(TIM4_IRQn);
+	HAL_NVIC_SetPriority(TIM4_IRQn, 8, 0);
+}
 int main(void) {
 
 	HAL_Init();
@@ -132,6 +149,7 @@ int main(void) {
 	init_warmer_button();
 	init_led_pins();
 	init_uart_handle();
+	init_water_saving_timer();
 
 	while (1)
 	{
@@ -152,6 +170,20 @@ void EXTI9_5_IRQHandler()
 void EXTI15_10_IRQHandler()
 {
 	HAL_GPIO_EXTI_IRQHandler(user_button_handle.Pin);
+}
+
+void TIM4_IRQHandler()
+{
+	HAL_TIM_IRQHandler(&water_saving_timer_handle);
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim->Instance == water_saving_timer_handle.Instance){
+		faucet_state = OFF;
+		HAL_TIM_Base_Stop_IT(&water_saving_timer_handle);
+		printf("The faucet is closed.\r\n");
+	}
 }
 
 void Error_Handler(void)
