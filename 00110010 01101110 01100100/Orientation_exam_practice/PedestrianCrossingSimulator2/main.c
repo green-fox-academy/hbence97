@@ -116,6 +116,7 @@ int main(void)
 	init_leds();
 	init_user_button();
 	init_uart();
+	init_timer();
 
 	while(1) {
 		if (light_state == RED){
