@@ -55,8 +55,8 @@ void init_timer(void) {
 	HAL_TIM_Base_DeInit(&timer_handle);
 	__HAL_TIM_SET_COUNTER(&timer_handle, 0);
 	timer_handle.Instance = TIM2;
-	timer_handle.Init.Prescaler = 129600 - 1;			//NAGYJÁBÓL STIMMEL AZ IDÕ
-	timer_handle.Init.Period = 12000 - 1;				//NAGYJÁBÓL STIMMEL AZ IDÕ
+	timer_handle.Init.Prescaler = 54000 - 1;			//NAGYJ?B?L STIMMEL AZ ID?
+	timer_handle.Init.Period = 24000 - 1;				//NAGYJ?B?L STIMMEL AZ ID?
 	timer_handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	timer_handle.Init.CounterMode = TIM_COUNTERMODE_UP;
 
@@ -79,22 +79,22 @@ int main(void) {
 	//HAL_TIM_Base_Start_IT(&timer_handle);
 	while (1) {
 		timer_value = __HAL_TIM_GET_COUNTER(&timer_handle);
-		if (timer_value  > 0 && timer_value <= 7000) {
+		if (timer_value  > 0 && timer_value <= 14000) {
 			HAL_GPIO_WritePin(GPIOF, green_light_handle.Pin,GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOF, yellow_light_handle.Pin,GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOF, red_light_handle.Pin,GPIO_PIN_RESET);
 		}
-		if (timer_value > 7000 && timer_value <= 9000) {
+		if (timer_value > 14000 && timer_value <= 18000) {
 			HAL_GPIO_WritePin(GPIOF, green_light_handle.Pin,GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOF, yellow_light_handle.Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOF, red_light_handle.Pin,GPIO_PIN_RESET);
 		}
-		if (timer_value > 9000 && timer_value <= 12000){
+		if (timer_value > 18000 && timer_value <= 24000){
 			HAL_GPIO_WritePin(GPIOF, green_light_handle.Pin,GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOF, yellow_light_handle.Pin,GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOF, red_light_handle.Pin, GPIO_PIN_SET);
 		}
-		if (timer_value == 12000) {
+		if (timer_value == 24000) {
 			timer_value = 0;
 		}
 	}
