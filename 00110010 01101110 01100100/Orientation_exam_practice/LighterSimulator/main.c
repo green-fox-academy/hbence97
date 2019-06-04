@@ -33,9 +33,16 @@ typedef enum {
 	OFF
 } valve_state_t;
 
+typedef enum {
+	ON,
+	OFF
+} charging_t;
+
 volatile state_t state = OFF;
 uint8_t gas_amount = 20;
 uint8_t charging_period = 50000; //5 sec
+
+uint32_t time_until_empty = 200000;
 
 // GPIO Typedefs
 GPIO_InitTypeDef valve_button_handle;
@@ -175,12 +182,17 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	if (GPIO_Pin == user_button_handle.Pin && gas_amount == 0 && state == OFF){
 		__HAL_TIM_SET_AUTORELOAD(&timer_handle, 2500);
 		HAL_TIM_Base_Start_IT(&timer_handle); // elinditja a timert interruptban
-
+		// Töltés
 	} else if (GPIO_Pin == valve_button_handle.Pin){
 		gas_amount--;
+		// Csak a valve button nyomása
 	} else if (GPIO_Pin == spark_button_handle.Pin && valve_button_handle.Pin && gas_amount > 0 && state == ON) {
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // ezzel gyujtom fel
 		gas_amount--;
+		// Burning
+	} else if (gas_amount == 0){
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);
+		// Hogyha nincs gáz akkor LED off
 	}
 }
 
@@ -192,9 +204,17 @@ void TIM2_IRQHandler()
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == timer_handle.Instance) {
-		if ()
+		if (valve_state_t == ON){
+			valve_state_t = OFF;
+			__HAL_TIM_SET_AUTORELOAD(&timer_handle, time_until_empty);
+		}
+		if (charging_t == ON) {
+			__HAL_TIM_SET_AUTORELOAD(&timer_handle, charging_period);
+		}
+		if (time_until_empty == 0){
+			state = OFF;
+		}
 	}
-
 }
 
 void Error_Handler(void)
