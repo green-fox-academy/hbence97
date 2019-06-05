@@ -24,5 +24,6 @@ int main() {
     for (i = 0; i < number_of_records; ++i) {
         printf("%s %d\n", (ptr + i)->subject, (ptr + i)->marks);
     }
+    free(ptr);
     return 0;
 }
