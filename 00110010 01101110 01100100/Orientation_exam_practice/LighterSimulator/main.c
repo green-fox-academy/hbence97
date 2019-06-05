@@ -187,9 +187,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		HAL_TIM_Base_Start_IT(&timer_handle); // elinditja a timert interruptban
 		// Töltés
 	} else if (GPIO_Pin == valve_button_handle.Pin){
+		HAL_TIM_Base_Start_IT(&timer_handle);
 		gas_amount--;
+		if (gas_amount == 0){
+			HAL_TIM_Base_Stop_IT(&timer_handle);
+		}
 		// Csak a valve button nyomása
-	} else if (GPIO_Pin == spark_button_handle.Pin && valve_button_handle.Pin && gas_amount > 0 && state == ON) {
+	} else if (spark_button_handle.Pin && valve_state == ON_VALVE && gas_amount > 0 /*&& state == ON*/) {
+		state = ON;
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // ezzel gyujtom fel
 		gas_amount--;
 		// Burning
@@ -207,8 +212,8 @@ void TIM2_IRQHandler()
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == timer_handle.Instance) {
-		if (valve_state == ON_VALVE){
-			valve_state = OFF_VALVE;
+		if (valve_state == OFF_VALVE){
+			valve_state = ON_VALVE;
 			__HAL_TIM_SET_AUTORELOAD(&timer_handle, time_until_empty);
 		}
 		if (charge_state == ON_CHARGE) {
