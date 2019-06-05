@@ -24,23 +24,26 @@ typedef enum {
 } state_t;
 
 typedef enum {
-	ON,
-	OFF
+	ON_SPARK,
+	OFF_SPARK
 } spark_state_t;
 
 typedef enum {
-	ON,
-	OFF
+	ON_VALVE,
+	OFF_VALVE
 } valve_state_t;
 
 typedef enum {
-	ON,
-	OFF
+	ON_CHARGE,
+	OFF_CHARGE
 } charging_t;
 
 volatile state_t state = OFF;
+volatile valve_state_t valve_state = OFF_VALVE;
+volatile spark_state_t spark_state = OFF_SPARK;
+volatile charging_t charge_state = OFF_CHARGE;
 uint8_t gas_amount = 20;
-uint8_t charging_period = 50000; //5 sec
+uint32_t charging_period = 50000; //5 sec
 
 uint32_t time_until_empty = 200000;
 
@@ -204,11 +207,11 @@ void TIM2_IRQHandler()
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == timer_handle.Instance) {
-		if (valve_state_t == ON){
-			valve_state_t = OFF;
+		if (valve_state == ON_VALVE){
+			valve_state = OFF_VALVE;
 			__HAL_TIM_SET_AUTORELOAD(&timer_handle, time_until_empty);
 		}
-		if (charging_t == ON) {
+		if (charge_state == ON_CHARGE) {
 			__HAL_TIM_SET_AUTORELOAD(&timer_handle, charging_period);
 		}
 		if (time_until_empty == 0){
