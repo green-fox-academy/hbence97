@@ -19,30 +19,31 @@ void SystemClock_Config();
 void Error_Handler();
 
 typedef enum {
-	ON,
-	OFF
+	RISING, FALLING
+} button_state_t;
+volatile button_state_t button_state = RISING;
+
+typedef enum {
+	ON, OFF
 } state_t;
 
 typedef enum {
-	ON_SPARK,
-	OFF_SPARK
+	ON_SPARK, OFF_SPARK
 } spark_state_t;
 
 typedef enum {
-	ON_VALVE,
-	OFF_VALVE
+	ON_VALVE, OFF_VALVE
 } valve_state_t;
 
 typedef enum {
-	ON_CHARGE,
-	OFF_CHARGE
+	ON_CHARGE, OFF_CHARGE
 } charging_t;
 
 volatile state_t state = OFF;
 volatile valve_state_t valve_state = OFF_VALVE;
 volatile spark_state_t spark_state = OFF_SPARK;
 volatile charging_t charge_state = OFF_CHARGE;
-uint8_t gas_amount = 20;
+volatile uint8_t gas_amount = 5;
 uint32_t charging_period = 50000; //5 sec
 
 uint32_t time_until_empty = 200000;
@@ -59,9 +60,9 @@ UART_HandleTypeDef uart_handle;
 // Timer Typedef
 TIM_HandleTypeDef timer_handle;
 
-void init_uart()
-{
-	__HAL_RCC_USART1_CLK_ENABLE();
+void init_uart() {
+	__HAL_RCC_USART1_CLK_ENABLE()
+	;
 
 	uart_handle.Instance = USART1;
 	uart_handle.Init.BaudRate = 115200;
@@ -74,12 +75,12 @@ void init_uart()
 	BSP_COM_Init(COM1, &uart_handle);
 }
 
-void init_valve_button()
-{
-	__HAL_RCC_GPIOA_CLK_ENABLE();
+void init_valve_button() {
+	__HAL_RCC_GPIOA_CLK_ENABLE()
+	;
 
 	valve_button_handle.Pin = GPIO_PIN_0;
-	valve_button_handle.Mode = GPIO_MODE_IT_RISING;
+	valve_button_handle.Mode = GPIO_MODE_IT_RISING_FALLING;
 	valve_button_handle.Pull = GPIO_NOPULL;
 	valve_button_handle.Speed = GPIO_SPEED_HIGH;
 
@@ -89,9 +90,9 @@ void init_valve_button()
 	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 }
 
-void init_spark_button()
-{
-	__HAL_RCC_GPIOF_CLK_ENABLE();
+void init_spark_button() {
+	__HAL_RCC_GPIOF_CLK_ENABLE()
+	;
 
 	spark_button_handle.Pin = GPIO_PIN_9;
 	spark_button_handle.Mode = GPIO_MODE_IT_RISING;
@@ -104,12 +105,12 @@ void init_spark_button()
 	HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 }
 
-void init_user_button()
-{
-	__HAL_RCC_GPIOI_CLK_ENABLE();
+void init_user_button() {
+	__HAL_RCC_GPIOI_CLK_ENABLE()
+	;
 
 	user_button_handle.Pin = GPIO_PIN_11;
-	user_button_handle.Mode = GPIO_MODE_IT_RISING;
+	user_button_handle.Mode = GPIO_MODE_IT_RISING_FALLING;
 	user_button_handle.Pull = GPIO_NOPULL;
 	user_button_handle.Speed = GPIO_SPEED_HIGH;
 
@@ -119,9 +120,9 @@ void init_user_button()
 	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
-void init_led()
-{
-	__HAL_RCC_GPIOA_CLK_ENABLE();
+void init_led() {
+	__HAL_RCC_GPIOA_CLK_ENABLE()
+	;
 
 	led_handle.Pin = GPIO_PIN_15;
 	led_handle.Mode = GPIO_MODE_OUTPUT_PP;
@@ -131,13 +132,13 @@ void init_led()
 	HAL_GPIO_Init(GPIOA, &led_handle);
 }
 
-void init_timer()
-{
-	__HAL_RCC_TIM2_CLK_ENABLE();
+void init_timer() {
+	__HAL_RCC_TIM2_CLK_ENABLE()
+	;
 
 	timer_handle.Instance = TIM2;
 	timer_handle.Init.Prescaler = 10800 - 1; // 0.1 ms * 5000ms
-	timer_handle.Init.Period = 50000 - 1; // 5 sec
+	timer_handle.Init.Period = 10000 - 1; // 1 sec
 	timer_handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	timer_handle.Init.CounterMode = TIM_COUNTERMODE_UP;
 
@@ -147,8 +148,7 @@ void init_timer()
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 }
 
-int main(void)
-{
+int main(void) {
 	HAL_Init();
 	SystemClock_Config();
 
@@ -159,74 +159,98 @@ int main(void)
 	init_led();
 	init_timer();
 
-	while(1) {
+	while (1) {
 
 	}
 }
 
-void EXTI15_10_IRQHandler()
-{
+void EXTI15_10_IRQHandler() {
 	HAL_GPIO_EXTI_IRQHandler(user_button_handle.Pin);
 }
 
-void EXTI9_5_IRQHandler()
-{
+void EXTI9_5_IRQHandler() {
 	HAL_GPIO_EXTI_IRQHandler(spark_button_handle.Pin);
 }
 
-void EXTI0_IRQHandler()
-{
+void EXTI0_IRQHandler() {
 	HAL_GPIO_EXTI_IRQHandler(valve_button_handle.Pin);
 }
 
-
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if (GPIO_Pin == user_button_handle.Pin && gas_amount == 0 && state == OFF){
-		__HAL_TIM_SET_AUTORELOAD(&timer_handle, 2500);
-		HAL_TIM_Base_Start_IT(&timer_handle); // elinditja a timert interruptban
-		// Töltés
-	} else if (GPIO_Pin == valve_button_handle.Pin){
-		HAL_TIM_Base_Start_IT(&timer_handle);
-		gas_amount--;
-		if (gas_amount == 0){
-			HAL_TIM_Base_Stop_IT(&timer_handle);
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	if (GPIO_Pin == valve_button_handle.Pin) {
+		if (button_state== RISING) {
+			button_state = FALLING;
+			valve_state = ON_VALVE;
+			HAL_TIM_Base_Start_IT(&timer_handle);
+			/* start measure timer */
+			HAL_TIM_Base_Start_IT(&timer_handle);
+		} else {
+			button_state = RISING;
+			valve_state = OFF_VALVE;
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);
 		}
-		// Csak a valve button nyomása
-	} else if (spark_button_handle.Pin && valve_state == ON_VALVE && gas_amount > 0 /*&& state == ON*/) {
-		state = ON;
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // ezzel gyujtom fel
-		gas_amount--;
-		// Burning
-	} else if (gas_amount == 0){
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);
-		// Hogyha nincs gáz akkor LED off
+
+	} else if (GPIO_Pin == spark_button_handle.Pin && valve_state == ON_VALVE && gas_amount > 0) {
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET);
 	}
+	/*if (GPIO_Pin == user_button_handle.Pin && gas_amount == 0 && state == OFF){
+	 __HAL_TIM_SET_AUTORELOAD(&timer_handle, 2500);
+	 HAL_TIM_Base_Start_IT(&timer_handle); // elinditja a timert interruptban
+	 // Töltés
+	 } else if (GPIO_Pin == valve_button_handle.Pin){
+	 HAL_TIM_Base_Start_IT(&timer_handle);
+	 gas_amount--;
+	 if (gas_amount == 0){
+	 HAL_TIM_Base_Stop_IT(&timer_handle);
+	 }
+	 // Csak a valve button nyomása
+	 } else if (spark_button_handle.Pin && valve_state == ON_VALVE && gas_amount > 0 //&& state == ON)
+	 {
+	 state = ON;
+	 HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // ezzel gyujtom fel
+	 gas_amount--;
+	 } else if (valve_state == ON_VALVE && spark_state == ON_SPARK ) {
+	 valve_state = OFF_VALVE;
+	 spark_state = OFF_SPARK;
+	 HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, RESET); // ezzel gyujtom le
+	 // Burning
+	 } else if (gas_amount == 0){
+	 HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);
+	 // Hogyha nincs gáz akkor LED off
+	 } else if (spark_state == OFF_SPARK || valve_state == OFF_VALVE){
+	 HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);
+	 // Hogyha valamelyik state off, akkor kapcsoljon ki a LED
+	 }*/
+
 }
 
-void TIM2_IRQHandler()
-{
+void TIM2_IRQHandler() {
 	HAL_TIM_IRQHandler(&timer_handle);
 }
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if (htim->Instance == timer_handle.Instance) {
-		if (valve_state == OFF_VALVE){
+		if ( gas_amount > 0){
+		gas_amount--;
+		}
+		if (gas_amount == 0){
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);
+			HAL_TIM_Base_Start_IT(&timer_handle);
+		}
+		/*if (valve_state == OFF_VALVE) {
 			valve_state = ON_VALVE;
 			__HAL_TIM_SET_AUTORELOAD(&timer_handle, time_until_empty);
 		}
 		if (charge_state == ON_CHARGE) {
 			__HAL_TIM_SET_AUTORELOAD(&timer_handle, charging_period);
 		}
-		if (time_until_empty == 0){
+		if (time_until_empty == 0) {
 			state = OFF;
-		}
+		}*/
 	}
 }
 
-void Error_Handler(void)
-{
+void Error_Handler(void) {
 }
 
 void SystemClock_Config(void) {
