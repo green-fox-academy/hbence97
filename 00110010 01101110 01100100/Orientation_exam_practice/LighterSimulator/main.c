@@ -19,9 +19,11 @@ void SystemClock_Config();
 void Error_Handler();
 
 typedef enum {
-	RISING, FALLING
+	NOT_PRESSED, PRESSED
 } button_state_t;
-volatile button_state_t button_state = RISING;
+volatile button_state_t user_button_state = NOT_PRESSED;
+volatile button_state_t valve_button_state = NOT_PRESSED;
+volatile button_state_t spark_button_state = NOT_PRESSED;
 
 typedef enum {
 	ON, OFF
@@ -44,9 +46,7 @@ volatile valve_state_t valve_state = OFF_VALVE;
 volatile spark_state_t spark_state = OFF_SPARK;
 volatile charging_t charge_state = OFF_CHARGE;
 volatile uint8_t gas_amount = 5;
-uint32_t charging_period = 50000; //5 sec
-
-uint32_t time_until_empty = 200000;
+volatile uint32_t charging_period = 50000; //5 sec
 
 // GPIO Typedefs
 GPIO_InitTypeDef valve_button_handle;
@@ -178,20 +178,31 @@ void EXTI0_IRQHandler() {
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	if (GPIO_Pin == valve_button_handle.Pin) {
-		if (button_state== RISING) {
-			button_state = FALLING;
+		if (valve_button_state == NOT_PRESSED) {
+			valve_button_state = PRESSED;
 			valve_state = ON_VALVE;
-			HAL_TIM_Base_Start_IT(&timer_handle);
-			/* start measure timer */
+			/* start timer to be able to decrease it by one each sec */
 			HAL_TIM_Base_Start_IT(&timer_handle);
 		} else {
-			button_state = RISING;
+			valve_button_state = NOT_PRESSED;
 			valve_state = OFF_VALVE;
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);
+			HAL_TIM_Base_Stop_IT(&timer_handle);
 		}
 
-	} else if (GPIO_Pin == spark_button_handle.Pin && valve_state == ON_VALVE && gas_amount > 0) {
+	} else if (GPIO_Pin == spark_button_handle.Pin && valve_state == ON_VALVE
+			&& gas_amount > 0) {
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET);
+	} else if (GPIO_Pin == user_button_handle.Pin && gas_amount == 0) {
+		if (user_button_state == NOT_PRESSED) {
+			user_button_state = PRESSED;
+			charge_state = ON_CHARGE;
+			HAL_TIM_Base_Start_IT(&timer_handle);
+		} else {
+			user_button_state = NOT_PRESSED;
+			charge_state = OFF_CHARGE;
+			HAL_TIM_Base_Stop_IT(&timer_handle);
+		}
 	}
 	/*if (GPIO_Pin == user_button_handle.Pin && gas_amount == 0 && state == OFF){
 	 __HAL_TIM_SET_AUTORELOAD(&timer_handle, 2500);
@@ -230,26 +241,32 @@ void TIM2_IRQHandler() {
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if (htim->Instance == timer_handle.Instance) {
-		if ( gas_amount > 0){
-		gas_amount--;
+		if (gas_amount > 0 && valve_state == ON_VALVE /*&& charge_state == OFF_CHARGE*/) {
+			gas_amount--;
+			printf("Gas is decreasing %d .\n", gas_amount);
 		}
-		if (gas_amount == 0){
+		if (gas_amount == 0 && charge_state == OFF_CHARGE) {
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);
-			HAL_TIM_Base_Start_IT(&timer_handle);
+			HAL_TIM_Base_Stop_IT(&timer_handle);
 		}
-		/*if (valve_state == OFF_VALVE) {
-			valve_state = ON_VALVE;
-			__HAL_TIM_SET_AUTORELOAD(&timer_handle, time_until_empty);
+		if (charge_state == ON_CHARGE && gas_amount < 5) {
+			gas_amount++;
+			printf("Gas is increasing by %d\n",gas_amount);
+			//charge_state = OFF_CHARGE;
+			//}
+			/*if (valve_state == OFF_VALVE) {
+			 valve_state = ON_VALVE;
+			 __HAL_TIM_SET_AUTORELOAD(&timer_handle, time_until_empty);
+			 }
+			 if (charge_state == ON_CHARGE) {
+			 __HAL_TIM_SET_AUTORELOAD(&timer_handle, charging_period);
+			 }
+			 if (time_until_empty == 0) {
+			 state = OFF;
+			 }*/
 		}
-		if (charge_state == ON_CHARGE) {
-			__HAL_TIM_SET_AUTORELOAD(&timer_handle, charging_period);
-		}
-		if (time_until_empty == 0) {
-			state = OFF;
-		}*/
 	}
 }
-
 void Error_Handler(void) {
 }
 
