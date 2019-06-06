@@ -46,7 +46,7 @@ volatile valve_state_t valve_state = OFF_VALVE;
 volatile spark_state_t spark_state = OFF_SPARK;
 volatile charging_t charge_state = OFF_CHARGE;
 volatile uint8_t gas_amount = 5;
-volatile uint32_t charging_period = 50000; //5 sec
+//volatile uint32_t charging_period = 50000; //5 sec
 
 // GPIO Typedefs
 GPIO_InitTypeDef valve_button_handle;
@@ -241,7 +241,7 @@ void TIM2_IRQHandler() {
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if (htim->Instance == timer_handle.Instance) {
-		if (gas_amount > 0 && valve_state == ON_VALVE /*&& charge_state == OFF_CHARGE*/) {
+		if (gas_amount > 0 && valve_state == ON_VALVE 	/*&& charge_state == OFF_CHARGE*/) {
 			gas_amount--;
 			printf("Gas is decreasing %d .\n", gas_amount);
 		}
