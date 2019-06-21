@@ -34,6 +34,8 @@ void mouseCallback(int event, int x, int y, int flags, void* userdata)
 		cv::line(image, cv::Point(400,400), cv::Point(800,400), cv::Scalar(255), 2, 8, 0);
 		// Drawing the line which follows the mouse if you left click
 		cv::line(image, cv::Point(400,400), cv::Point(x, y), cv::Scalar(255), 2, 8, 0);
+		cv::putText(image,"TEXT", /* The text you wanna display */cv::Point(400, 435),/* Coordinates */cv::FONT_HERSHEY_COMPLEX_SMALL, /* Font */
+		2.0, /* Scale. 2.0 = 2x bigger */ cv::Scalar(255,255, 255), /* BGR Color */ 1); /* Line Thickness (Optional) */ /* cv::CV_AA); Anti-alias (Optional) */
 		// Showing the image
 		imshow("Ablak", image);
 	}
