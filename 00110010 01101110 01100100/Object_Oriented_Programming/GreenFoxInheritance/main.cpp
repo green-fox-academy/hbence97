@@ -2,6 +2,7 @@
 #include "person.h"
 #include "student.h"
 #include "mentor.h"
+#include "sponsor.h"
 
 int main() {
     Person person1;
@@ -25,6 +26,16 @@ int main() {
     Mentor mentor2("Matyi", 29, MALE, INTERMEDIATE);
     mentor2.introduce();
     mentor2.getGoal();
+
+    Sponsor sponsor1;
+    sponsor1.hire();
+    sponsor1.introduce();
+
+    Sponsor sponsor2("George", 26, MALE, "comma.ai");
+    sponsor2.hire();
+    sponsor2.hire();
+    sponsor2.introduce();
+    sponsor2.getGoal();
 
     return 0;
 }
