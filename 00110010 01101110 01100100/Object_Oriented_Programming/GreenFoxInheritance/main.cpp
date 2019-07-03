@@ -1,6 +1,7 @@
 #include <iostream>
 #include "person.h"
 #include "student.h"
+#include "mentor.h"
 
 int main() {
     Person person1;
@@ -17,6 +18,13 @@ int main() {
     student2.skipDays(2);
     student2.introduce();
     student2.getGoal();
+
+    Mentor mentor1;
+    mentor1.introduce();
+
+    Mentor mentor2("Matyi", 29, MALE, INTERMEDIATE);
+    mentor2.introduce();
+    mentor2.getGoal();
 
     return 0;
 }

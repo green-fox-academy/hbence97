@@ -22,5 +22,4 @@ public:
     virtual void getGoal();
 };
 
-
 #endif //GREENFOXINHERITANCE_PERSON_H

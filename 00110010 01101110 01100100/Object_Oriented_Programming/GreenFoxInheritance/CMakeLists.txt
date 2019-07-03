@@ -3,4 +3,4 @@ project(GreenFoxInheritance)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(GreenFoxInheritance main.cpp person.cpp person.h student.cpp student.h)
+add_executable(GreenFoxInheritance main.cpp person.cpp person.h student.cpp student.h mentor.cpp mentor.h)

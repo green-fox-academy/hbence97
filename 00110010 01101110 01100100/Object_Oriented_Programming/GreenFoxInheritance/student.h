@@ -19,5 +19,4 @@ public:
     void introduce() override;
 };
 
-
 #endif //GREENFOXINHERITANCE_STUDENT_H

@@ -34,4 +34,3 @@ int Student::skipDays(int numberOfDays) {
     _skippedDays += numberOfDays;
     return _skippedDays;
 }
-
