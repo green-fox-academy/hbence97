@@ -1,35 +1,30 @@
 #include "pch.h"
 #include <iostream>
+#include <vector>
 
-void swap(int *elementOne, int *elementTwo);
-void bubbleSort(int arr[], int n);
-void printArray(int arr[], int sizeOfArray);
-
+void bubbleSort(std::vector<int> &array);
+void printArray(std::vector<int> &arr);
 
 int main(int argc, char ** argv)
 {
-	int array[] = {64, 32, 37, 4, 56, 76, 54, 21, 81};
-	int n = sizeof(array) / sizeof(array[0]);
-	bubbleSort(array, n);
+	std::vector<int> array = {64, 32, 37, 4, 56, 76, 54, 21, 81};
+	bubbleSort(array);
 	std::cout << "Sorted array: " << std::endl;
-	printArray(array, n);
+	printArray(array);
 	
 	return 0;
 }
 
-void swap(int *firstElement, int *secondElement) {
-	int temporary = *firstElement;
-	*firstElement = *secondElement;
-	*secondElement = temporary;
-}
-
-void bubbleSort(int array[], int n) {
+void bubbleSort(std::vector<int> &array) {
 	bool swapped;
-	for (int i = 0; i < n-1; i++) {
+	int temporary;
+	for (int i = 1; i < array.size(); i++) {
 		swapped = false;
-		for (int j = 0; j < n-i-1; j++) {
+		for (int j = 0; j < array.size() - i; j++) {
 			if (array[j] > array[j + 1]) {
-				swap(&array[j], &array[j + 1]);
+				temporary = array[j];
+				array[j] = array[j + 1];
+				array[j + 1] = temporary;
 				swapped = true;
 			}
 		}
@@ -38,9 +33,9 @@ void bubbleSort(int array[], int n) {
 		}
 	}
 }
-
-void printArray(int arr[], int sizeOfArray) {
-	for (int i = 0; i < sizeOfArray; i++) {
+ 
+void printArray(std::vector<int> &arr) {
+	for (int i =  0; i < arr.size(); i++) {
 		std::cout << arr[i] << " ";
 	}
 }
