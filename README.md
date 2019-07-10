@@ -1,4 +1,4 @@
-Greenfox Academy repository of Bence Hegyes
+Green Fox Academy repository of Bence Hegyes
 
 And my repository:
 
