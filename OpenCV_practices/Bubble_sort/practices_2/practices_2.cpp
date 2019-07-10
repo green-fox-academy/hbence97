@@ -4,6 +4,7 @@
 
 void bubbleSort(std::vector<int> &array);
 void printArray(std::vector<int> &arr);
+void printArrayBackwards(std::vector<int> &arr);
 
 int main(int argc, char ** argv)
 {
@@ -11,6 +12,7 @@ int main(int argc, char ** argv)
 	bubbleSort(array);
 	std::cout << "Sorted array: " << std::endl;
 	printArray(array);
+	printArrayBackwards(array);
 	
 	return 0;
 }
@@ -38,4 +40,13 @@ void printArray(std::vector<int> &arr) {
 	for (int i =  0; i < arr.size(); i++) {
 		std::cout << arr[i] << " ";
 	}
+	std::cout << "\n";
+}
+
+void printArrayBackwards(std::vector<int> &arr) {
+	std::reverse(arr.begin(), arr.end());
+	for (std::vector<int>::iterator i = arr.begin(); i != arr.end(); ++i) {
+		std::cout << *i << " ";
+	}
+	std::cout << "\n";
 }
