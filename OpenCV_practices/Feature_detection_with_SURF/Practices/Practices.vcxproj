@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{47B96D1F-9E10-41B2-A66B-EA9E3E9316AC}</ProjectGuid>
+    <ProjectGuid>{D2244D17-2F57-4613-A746-1835D40017A9}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>practices2</RootNamespace>
+    <RootNamespace>Practices</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -166,7 +166,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="practices_2.cpp" />
+    <ClCompile Include="Practices.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
